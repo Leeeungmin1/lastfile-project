@@ -26,19 +26,11 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    # 3. Docker 이미지 빌드 및 멀티 Push (Docker Hub & ACR)
+    # 3. Docker 이미지 빌드 및 멀티 Push (주석을 제거한 깔끔한 빌드 스크립트)
     - name: Build and Push to Both Registries
       run: |
-        # 이 부분에 본인의 Docker Hub ID를 소문자로 기입하세요 (예: dockerhub_username)
-        DOCKERHUB_ORG="dockerhub_username" 
-        
-        # 이미지 빌드
-        docker build -t $DOCKERHUB_ORG/test-web-app:${{ github.sha }} -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }} .
-        
-        # Docker Hub로 push
-        docker push $DOCKERHUB_ORG/test-web-app:${{ github.sha }}
-        
-        # Azure ACR로 push
+        docker build -t Leeeungmin1/test-web-app:${{ github.sha }} -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }} .
+        docker push Leeeungmin1/test-web-app:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }}
 
     # 4. Azure App Service에 자동 배포
