@@ -26,19 +26,20 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    # 3. Docker 이미지 빌드 및 멀티 Push (표준화된 멀티 태그 스크립트)
+    # 3. Docker 이미지 빌드 및 멀티 Push
     - name: Build and Push to Both Registries
       run: |
-        # 1. 동일한 이미지에 Docker Hub와 ACR 태그를 각각 붙여 빌드
+        # 1. 확인된 소문자 계정(leeeungmin) 주소로 멀티 태깅 빌드
         docker build \
-          -t docker.io/leeeungmin1/test-web-app:${{ github.sha }} \
+          -t docker.io/leeeungmin/test-web-app:${{ github.sha }} \
           -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }} .
         
-        # 2. Docker Hub로 push (leeeungmin1은 소문자 처리 안전 보장)
-        docker push docker.io/leeeungmin1/test-web-app:${{ github.sha }}
+        # 2. Docker Hub push
+        docker push docker.io/leeeungmin/test-web-app:${{ github.sha }}
         
-        # 3. Azure ACR로 push
+        # 3. Azure ACR push
         docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }}
+
     # 4. Azure App Service에 자동 배포
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
