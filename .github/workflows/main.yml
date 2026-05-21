@@ -11,11 +11,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 1. Docker Hub 로그인
+    # 1. Docker Hub 로그인 (사용자명 직접 명시)
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        username: leeeungmin
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # 2. Azure Container Registry(ACR) 로그인
@@ -29,15 +29,15 @@ jobs:
     # 3. Docker 이미지 빌드 및 멀티 Push
     - name: Build and Push to Both Registries
       run: |
-        # 멀티 태깅 빌드 실행
+        # 계정명 leeeungmin 고정 상태로 멀티 태깅 빌드
         docker build \
           -t leeeungmin/test-web-app:${{ github.sha }} \
           -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }} .
         
-        # Docker Hub 업로드
+        # Docker Hub로 업로드
         docker push leeeungmin/test-web-app:${{ github.sha }}
         
-        # Azure ACR 업로드
+        # Azure ACR로 업로드
         docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }}
 
     # 4. Azure App Service에 자동 배포
