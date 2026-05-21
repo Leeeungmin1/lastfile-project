@@ -55,4 +55,4 @@ jobs:
           app-name: 'st714webapp'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           images: '${{ secrets.REGISTRY_USERNAME }}.azurecr.io/test-web-app:${{ github.sha }}'
-```
+
